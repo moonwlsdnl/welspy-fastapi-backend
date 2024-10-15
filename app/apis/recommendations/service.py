@@ -108,12 +108,12 @@ class RecommendationsService:
     
     # 외부 서버에서 전체 챌린지 ID 가져오기
     async def fetch_all_challenges(self):
-        # async with httpx.AsyncClient() as client:
-        #     response = await client.get("http://your-external-server.com/api/challenges")
-        #     if response.status_code != 200:
-        #         raise HTTPException(status_code=500, detail="Failed to fetch challenges from external API")
-        #     return response.json().get('challenges', [])
-        return [1, 2, 3, 4, 35, 36, 37, 123, 23123, 90912, 40, 41]
+        async with httpx.AsyncClient() as client:
+            response = await client.get("http://13.125.208.1:8080/data/id")
+            if response.status_code != 200:
+                raise HTTPException(status_code=500, detail="Failed to fetch challenges from external API")
+            return [item['roomId'] for item in response.json()['data']]
+
 
     # 챌린지를 count하고 빈도수가 높은 순서로 정렬
     async def count_and_sort_challenges(self, challenges: list):
