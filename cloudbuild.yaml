@@ -24,4 +24,5 @@ steps:
           --machine-type e2-standard-2 \
           --network default
 options:
-  logging: NONE
+  logging: CLOUD_LOGGING_ONLY
+logs_bucket: 'gs://welspy-bucket-logging'
