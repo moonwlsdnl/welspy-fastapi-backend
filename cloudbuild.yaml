@@ -25,4 +25,3 @@ steps:
           --network default
 options:
   logging: CLOUD_LOGGING_ONLY
-logs_bucket: 'gs://welspy-bucket-logging'
