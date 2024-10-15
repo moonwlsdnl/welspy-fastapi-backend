@@ -1,9 +1,9 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:1.1', '.']
+    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:1.2', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:1.1']
+    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:1.2']
 
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
@@ -17,7 +17,7 @@ steps:
           cd /home/moonwlsdnl/welspy-fastapi-backend/ && \
           docker-compose down && \
           docker-compose pull && \
-          docker-compose up
+          docker-compose up -d
         "
 
 options:
