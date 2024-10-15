@@ -10,11 +10,11 @@ steps:
     args:
       - '-c'
       - |
-        gcloud compute instances stop welpy-fastapi-backend --zone asia-northeast3 || true
+        gcloud compute instances stop welpy-fastapi-backend --zone asia-northeast3-a   || true
 
 
         gcloud compute instances create-with-container welpy-fastapi-backend \
-          --zone asia-northeast3 \
+          --zone asia-northeast3-a \
           --container-image asia.gcr.io/welspy-438208/welspy-fastapi-backend:0.3 \
 
 options:
