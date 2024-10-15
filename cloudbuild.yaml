@@ -1,9 +1,9 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:0.7', '.']
+    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:0.8', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:0.7']
+    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:0.8']
 
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
@@ -14,7 +14,8 @@ steps:
 
         gcloud compute instances create-with-container welspy-fastapi-backend \
           --zone asia-northeast3-a \
-          --container-image asia.gcr.io/welspy-438208/welspy-fastapi-backend:0.7 \
+          --container-image asia.gcr.io/welspy-438208/welspy-fastapi-backend:0.8 \
+          --tags http-server
 
 options:
   logging: CLOUD_LOGGING_ONLY
