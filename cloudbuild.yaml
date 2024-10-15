@@ -23,3 +23,5 @@ steps:
           --tags http-server \
           --machine-type e2-standard-2 \
           --network default
+options:
+  logging: NONE
