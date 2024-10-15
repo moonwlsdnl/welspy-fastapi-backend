@@ -1,0 +1,25 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:0.0', '.']
+  
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:0.0']
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud compute instances stop fastapi-backend-instance --zone asia-northeast3 || true
+
+        # Create or update the instance
+        gcloud compute instances create-with-container fastapi-backend-instance \
+          --zone asia-northeast3  \
+          --container-image asia.gcr.io/welspy-438208/welspy-fastapi-backend:0.0 \
+          --container-arg '--env' \
+          --container-env-file ./.env.docker \
+          --container-port 8000 \
+          --restart-on-failure \
+          --tags http-server \
+          --machine-type e2-standard-2 \
+          --network default

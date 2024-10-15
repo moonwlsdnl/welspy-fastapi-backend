@@ -1,6 +1,7 @@
 services:
   fastapi-backend:
     build:
+      image: asia.gcr.io/welspy-438208/welspy-fastapi-backend:0.0
       context: .
       dockerfile: Dockerfile
     platform: linux/x86_64

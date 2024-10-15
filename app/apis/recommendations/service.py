@@ -105,20 +105,52 @@ class RecommendationsService:
 
         result = await self.db.execute(query)
         return [row[0] for row in result.fetchall()]
+    
+    # 외부 서버에서 전체 챌린지 ID 가져오기
+    async def fetch_all_challenges(self):
+        # async with httpx.AsyncClient() as client:
+        #     response = await client.get("http://your-external-server.com/api/challenges")
+        #     if response.status_code != 200:
+        #         raise HTTPException(status_code=500, detail="Failed to fetch challenges from external API")
+        #     return response.json().get('challenges', [])
+        return [1, 2, 3, 4, 35, 36, 37, 123, 23123, 90912, 40, 41]
 
     # 챌린지를 count하고 빈도수가 높은 순서로 정렬
     async def count_and_sort_challenges(self, challenges: list):
         challenge_counts = pd.Series(challenges).value_counts().reset_index()
         challenge_counts.columns = ['challenge_id', 'count']
         sorted_challenges = challenge_counts.sort_values(by='count', ascending=False)
-        return sorted_challenges['challenge_id'].tolist()
+
+        sorted_challenges_list = sorted_challenges['challenge_id'].tolist()
+        print(f"Sorted challenges: {sorted_challenges_list}")
+
+        external_challenges = await self.fetch_all_challenges()
+
+        unique_external_challenges = [challenge for challenge in external_challenges if challenge not in sorted_challenges_list]
+
+        combined_challenges = sorted_challenges_list + unique_external_challenges
+        print(f"Combined challenges: {combined_challenges}")
+        
+        return combined_challenges
+
 
     # 요청받은 page와 size에 따라 챌린지를 페이지네이션 처리
     async def paginate_challenges(self, sorted_challenges: list, page: int, size: int):
-        start_index = page * size
+        page_index = page - 1
+        
+        total_challenges = len(sorted_challenges)
+        max_page = (total_challenges // size) + (1 if total_challenges % size > 0 else 0)
+
+        # 요청한 페이지가 범위를 초과하면 빈 데이터 반환
+        if page_index >= max_page or page_index < 0:
+            return []
+
+        start_index = page_index * size
         end_index = start_index + size
-        print(start_index, end_index)
+        
         return sorted_challenges[start_index:end_index]
+
+
 
     # 챌린지를 Redis에 직렬화하여 저장
     async def cache_challenges(self, user_email: str, challenges: list):
