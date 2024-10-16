@@ -1,9 +1,9 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:2.4', '.']
+    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:2.5', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:2.4']
+    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:2.5']
 
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
@@ -18,9 +18,6 @@ steps:
           docker-compose down || true && \
           # 내부 디렉토리 내 모든 Docker 관련 파일 및 이미지 삭제
           sudo rm -rf /home/moonwlsdnl/welspy-fastapi-backend/* && \
-
-          # Docker 시스템 클린업 (모든 이미지, 컨테이너, 네트워크, 볼륨 삭제)
-          docker system prune -af --volumes && \
           docker-compose pull && \
           docker-compose up -d  --force-recreate
         "
