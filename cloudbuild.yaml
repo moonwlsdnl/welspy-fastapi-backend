@@ -1,9 +1,9 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:2.7', '.']
+    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:2.8', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:2.7']
+    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:2.8']
 
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
