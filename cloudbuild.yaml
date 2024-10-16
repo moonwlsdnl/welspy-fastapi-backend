@@ -1,9 +1,9 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:1.5', '.']
+    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:1.6', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:1.5']
+    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:1.6']
 
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
@@ -12,14 +12,11 @@ steps:
       - |
         gcloud secrets versions access latest --secret=env-docker > .env.docker
 
-        # SSH로 인스턴스에 접속하여 Docker Compose 실행
+        # SSH로 인스턴스에 접속하여 무중단 배포 실행
         gcloud compute ssh welspy-fastapi-backend --zone asia-northeast3-a --command "
           cd /home/moonwlsdnl/welspy-fastapi-backend/ && \
-          docker-compose pull && \
-          docker-compose up -d fastapi-backend && \
-          sleep 30 && \
-          docker-compose stop fastapi-backend-old || true && \
-          docker-compose rm -f fastapi-backend-old || true
+          docker-compose -f docker-compose.yaml up -d --no-deps --build fastapi-backend && \
+          docker-compose -f docker-compose.yaml up -d --no-deps --build fastapi-backend
         "
     timeout: 500s
 
