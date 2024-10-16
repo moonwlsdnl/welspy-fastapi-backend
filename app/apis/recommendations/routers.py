@@ -21,12 +21,14 @@ async def recommendations(request: RequestDto, db: AsyncSession = Depends(get_db
     if cached_data:
         paginated_challenges = await service.paginate_challenges(cached_data, page=page, size=size)
         return {"roomIds": paginated_challenges}
-
+    
     # 유사한 사용자
     similar_users = await service.get_similar_users(user_email)
+    print(similar_users)
 
     # temp_user_action 테이블에서 챌린지 구하기
     challenges = await service.get_user_challenges(similar_users)
+    print(challenges)
 
     # 모든 챌린지를 count하고 정렬
     sorted_challenges = await service.count_and_sort_challenges(challenges)
@@ -36,5 +38,6 @@ async def recommendations(request: RequestDto, db: AsyncSession = Depends(get_db
 
     # 페이지네이션 처리
     paginated_challenges = await service.paginate_challenges(sorted_challenges, page, size)
+    print(paginated_challenges)
 
     return {"roomIds": paginated_challenges}
