@@ -10,8 +10,6 @@ steps:
     args:
       - '-c'
       - |
-        # echo $GOOGLE_APPLICATION_CREDENTIALS
-        # gcloud auth configure-docker asia.gcr.io
         gcloud compute ssh welspy-fastapi-backend --zone asia-northeast3-a --command "
           echo '$(gcloud secrets versions access latest --secret=env-docker)' > /home/moonwlsdnl/welspy-fastapi-backend/.env.docker && \
           cd /home/moonwlsdnl/welspy-fastapi-backend/ && \
