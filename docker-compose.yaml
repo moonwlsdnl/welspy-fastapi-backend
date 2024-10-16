@@ -3,15 +3,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: asia.gcr.io/welspy-438208/welspy-fastapi-backend:1.8
+    image: asia.gcr.io/welspy-438208/welspy-fastapi-backend:1.9
     platform: linux/x86_64
     ports:
       - 8000:8000
     env_file:
       - ./.env.docker
-    deploy:
-      restart_policy:
-        condition: on-failure
 
   redis:
     image: redis:latest
