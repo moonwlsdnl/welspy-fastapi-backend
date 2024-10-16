@@ -18,6 +18,5 @@ steps:
           docker-compose up -d  --force-recreate
         "
     timeout: 500s
-
 options:
   logging: CLOUD_LOGGING_ONLY
