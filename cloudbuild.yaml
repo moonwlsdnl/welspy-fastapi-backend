@@ -1,9 +1,9 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:2.9', '.']
+    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:3.0', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:2.9']
+    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:3.0']
 
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
@@ -20,3 +20,4 @@ steps:
     timeout: 500s
 options:
   logging: CLOUD_LOGGING_ONLY
+keyfiles
