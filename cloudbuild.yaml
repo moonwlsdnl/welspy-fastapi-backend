@@ -1,9 +1,9 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:1.2', '.']
+    args: ['build', '-t', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:1.3', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:1.2']
+    args: ['push', 'asia.gcr.io/welspy-438208/welspy-fastapi-backend:1.3']
 
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
@@ -17,8 +17,12 @@ steps:
           cd /home/moonwlsdnl/welspy-fastapi-backend/ && \
           docker-compose down && \
           docker-compose pull && \
-          docker-compose up -d
+          docker-compose up -d fastapi-backend && \
+          sleep 30 && \
+          docker-compose stop fastapi-backend-old && \
+          docker-compose rm -f fastapi-backend-old
         "
+    timeout: 500s
 
 options:
   logging: CLOUD_LOGGING_ONLY

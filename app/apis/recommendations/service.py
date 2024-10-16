@@ -21,36 +21,42 @@ class RecommendationsService:
     # 6시간 마다 temp_user_action 테이블 업데이트
     async def fetch_and_save_data(self):
         try:
+            # 외부 API에서 데이터 가져오기
             async with httpx.AsyncClient() as client:
                 response = await client.get("http://13.125.208.1:8080/data")
 
+            # 응답 실패 시 예외 처리
             if response.status_code != 200:
-                raise HTTPException(status_code=500, detail="Failed to fetch data from external API")
+                raise HTTPException(status_code=500, detail="외부 API에서 데이터를 가져오는 데 실패했습니다.")
 
             data = response.json()['data']
             
+            # 기존 데이터 삭제
             await self.db.execute(text("DELETE FROM temp_user_action"))
             await self.db.commit()
 
+            # 새 데이터 저장
             for item in data:
                 new_action = TempUserAction(
-                    user_email = item['userEmail'],
-                    challenge_id = item['challengeId'],
+                    user_email=item['userEmail'],
+                    challenge_id=item['challengeId'],
                     category=item['category'],
-                    start_time = item['startTime']
+                    start_time=item['startTime']
                 )
                 self.db.add(new_action)
 
             await self.db.commit()
-              
+            
+            # 유사도 계산 실행
             await self.calculate_similarity()
 
         except SQLAlchemyError as e:
-            await self.db.rollback()
-            raise HTTPException(status_code=500, detail="Database error occurred")
-        
+            await self.db.rollback()  # DB 트랜잭션 롤백
+            raise HTTPException(status_code=500, detail="데이터베이스 오류가 발생했습니다.")
+
         except HTTPException as e:
-            raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"오류가 발생했습니다: {str(e)}")
+
     
     async def calculate_similarity(self):
         query = select(
@@ -149,8 +155,6 @@ class RecommendationsService:
         end_index = start_index + size
         
         return sorted_challenges[start_index:end_index]
-
-
 
     # 챌린지를 Redis에 직렬화하여 저장
     async def cache_challenges(self, user_email: str, challenges: list):
