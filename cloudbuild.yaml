@@ -15,7 +15,7 @@ steps:
         # SSH로 인스턴스에 접속하여 Docker Compose 실행
         gcloud compute ssh welspy-fastapi-backend --zone asia-northeast3-a --command "
           cd /home/moonwlsdnl/welspy-fastapi-backend/ && \
-          docker-compose down && \
+          docker-compose down || true && \
           docker-compose pull && \
           docker-compose up -d
         "
