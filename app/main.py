@@ -39,7 +39,7 @@ async def fetch_and_save_data():
         service = await create_recommendations_service(db)
         await service.fetch_and_save_data()
 
-scheduler.add_job(fetch_and_save_data, 'interval', seconds=21600) # 6시간 마다 한번씩 실행
+scheduler.add_job(fetch_and_save_data, 'interval', seconds=3600) # 1시간 마다 한번씩 실행
 scheduler.start()
 
 origins = [
